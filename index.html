@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Slide Refresh</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const iframeUrl = "https://docs.google.com/presentation/d/e/2PACX-1vQzysrDi9DyH6I3l_18Wfpu8x2L4EDGY6_mldv1cMGohK3w3x_-Zud6CKYI5FCt00i6Pyi2A693u4DU/pub?start=true&loop=true&delayms=3000";
+            
+            // Create the iframe dynamically
+            const iframe = document.createElement('iframe');
+            iframe.src = iframeUrl;
+            iframe.style.width = '100%';
+            iframe.style.height = '100vh';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+            
+            // Detect slide count after iframe loads
+            iframe.onload = () => {
+                try {
+                    const slideCount = iframe.contentWindow.document.querySelectorAll('.punch-viewer-slide').length;
+                    console.log(`Number of slides detected: ${slideCount}`);
+                    
+                    const delayPerSlide = 3000; // Match delayms parameter in milliseconds
+                    const totalDuration = slideCount * delayPerSlide;
+                    
+                    console.log(`Refreshing page in ${totalDuration / 1000} seconds.`);
+                    
+                    // Set page reload based on total duration
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, totalDuration);
+                } catch (error) {
+                    console.error("Unable to access iframe content due to cross-origin restrictions. Check hosting and permissions.");
+                }
+            };
+        });
+    </script>
+</head>
+<body style="margin: 0; padding: 0;">
+</body>
+</html>
